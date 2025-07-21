@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>2Dマップゲーム</title>
+  <style>
+    canvas {
+      border: 2px solid #333;
+      image-rendering: pixelated;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="game" width="320" height="320"></canvas>
+
+  <script>
+    const canvas = document.getElementById('game');
+    const ctx = canvas.getContext('2d');
+
+    const tileSize = 32;
+    const map = [
+      [0,0,0,0,0,0,0,0,0,0],
+      [0,1,1,1,1,1,1,1,1,0],
+      [0,1,0,0,0,0,0,0,1,0],
+      [0,1,0,1,1,1,1,0,1,0],
+      [0,1,0,1,0,0,1,0,1,0],
+      [0,1,0,1,0,0,1,0,1,0],
+      [0,1,0,1,1,1,1,0,1,0],
+      [0,1,0,0,0,0,0,0,1,0],
+      [0,1,1,1,1,1,1,1,1,0],
+      [0,0,0,0,0,0,0,0,0,0]
+    ];
+
+    const colors = ['green', 'gray'];
+
+    let playerX = 1;
+    let playerY = 1;
+
+    function draw() {
+      // マップ描画
+      for (let y = 0; y < 10; y++) {
+        for (let x = 0; x < 10; x++) {
+          ctx.fillStyle = colors[map[y][x]];
+          ctx.fillRect(x * tileSize, y * tileSize, tileSize, tileSize);
+        }
+      }
+
+      // プレイヤー描画
+      ctx.fillStyle = 'red';
+      ctx.fillRect(playerX * tileSize, playerY * tileSize, tileSize, tileSize);
+    }
+
+    function move(dx, dy) {
+      const newX = playerX + dx;
+      const newY = playerY + dy;
+
+      if (map[newY][newX] === 1) { // 1が通れる道
+        playerX = newX;
+        playerY = newY;
+        draw();
+      }
+    }
+
+    window.addEventListener('keydown', (e) => {
+      switch(e.key) {
+        case 'ArrowUp': move(0, -1); break;
+        case 'ArrowDown': move(0, 1); break;
+        case 'ArrowLeft': move(-1, 0); break;
+        case 'ArrowRight': move(1, 0); break;
+      }
+    });
+
+    draw();
+  </script>
+</body>
+</html>
